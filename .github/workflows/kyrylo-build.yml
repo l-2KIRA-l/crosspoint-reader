@@ -1,0 +1,27 @@
+name: Kyrylo build (X4 firmware)
+
+on:
+  push:
+    branches: [kyrylo-notebook]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install PlatformIO
+        run: pip install platformio
+      - name: Build firmware
+        run: pio run -e default 2>&1 | tail -60
+      - name: Check output
+        run: ls -la .pio/build/default/firmware.bin
+      - uses: actions/upload-artifact@v4
+        with:
+          name: firmware-x4
+          path: .pio/build/default/firmware.bin

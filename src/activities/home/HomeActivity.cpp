@@ -27,6 +27,7 @@
 #include "fontIds.h"
 
 int HomeActivity::getMenuItemCount() const {
+  return static_cast<int>(recentBooks.size()) + NB_ICON_COUNT;  // Kyrylo: книжки + 3 іконки
   int count = 4;  // File Browser, Library, File transfer, Settings
   if (!recentBooks.empty()) {
     count += recentBooks.size();
@@ -235,6 +236,31 @@ void HomeActivity::onEnter() {
   // from inside the Plugins screen (or users can sideload plugins manually).
   hasPlugins = SETTINGS.pluginsEnabled != 0;
 
+  // Kyrylo: завжди «Блокнот»: поточна книжка + 3 нещодавні, потім 3 іконки
+  loadRecentBooks(NB_MAX_BOOKS);
+  hasContinueReading = !recentBooks.empty();
+  nbInfoLoaded = false;
+  {
+    const int n = static_cast<int>(recentBooks.size());
+    switch (initialMenuItem) {
+      case HomeMenuItem::FILE_BROWSER:
+      case HomeMenuItem::FILE_TRANSFER:
+        selectorIndex = n;
+        break;
+      case HomeMenuItem::LIBRARY:
+        selectorIndex = n + 1;
+        break;
+      case HomeMenuItem::SETTINGS_MENU:
+        selectorIndex = n + 2;
+        break;
+      default:
+        selectorIndex = 0;
+        break;
+    }
+  }
+  requestUpdate();
+  return;
+
   const auto& metrics = UITheme::getInstance().getMetrics();
   if (UITheme::getInstance().hasCoverGridHome()) {
     // Screen-lifetime interaction tables and component properties exceed the stack budget.
@@ -302,6 +328,8 @@ void HomeActivity::freeCoverBuffer() {
 }
 
 void HomeActivity::loop() {
+  nbLoop();  // Kyrylo
+  return;
   const int menuCount = getMenuItemCount();
   const auto& metrics = UITheme::getInstance().getMetrics();
 
@@ -464,6 +492,8 @@ void HomeActivity::loop() {
 }
 
 void HomeActivity::render(RenderLock&&) {
+  nbRender();  // Kyrylo
+  return;
   const auto& metrics = UITheme::getInstance().getMetrics();
   const auto pageWidth = renderer.getScreenWidth();
   const auto pageHeight = renderer.getScreenHeight();

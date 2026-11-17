@@ -109,6 +109,18 @@ EpdFontFamily notosans18FontFamily(18, &notosans18RegularFont, &notosans18BoldFo
 
 #endif  // OMIT_FONTS
 
+// Kyrylo: шрифти головного екрана «Блокнот»
+#include <builtinFonts/caveat_12_regular.h>
+#include <builtinFonts/caveat_16_regular.h>
+#include <builtinFonts/literata_digits_10.h>
+#include "notebookFontIds.h"
+EpdFont nbHand12Font(&caveat_12_regular);
+EpdFontFamily nbHand12FontFamily(12, &nbHand12Font);
+EpdFont nbHand16Font(&caveat_16_regular);
+EpdFontFamily nbHand16FontFamily(16, &nbHand16Font);
+EpdFont nbDigitsFont(&literata_digits_10);
+EpdFontFamily nbDigitsFontFamily(10, &nbDigitsFont);
+
 EpdFont smallFont(&ubuntu_8_regular);
 EpdFontFamily smallFontFamily(8, &smallFont);
 
@@ -556,6 +568,9 @@ void setupDisplayAndFonts(bool seamless = false) {
   renderer.insertFont(UI_10_FONT_ID, ui10FontFamily);
   renderer.insertFont(UI_12_FONT_ID, ui12FontFamily);
   renderer.insertFont(SMALL_FONT_ID, smallFontFamily);
+  renderer.insertFont(NB_HAND_12_FONT_ID, nbHand12FontFamily);
+  renderer.insertFont(NB_HAND_16_FONT_ID, nbHand16FontFamily);
+  renderer.insertFont(NB_DIGITS_FONT_ID, nbDigitsFontFamily);
 
   // Discover and load SD card fonts
   sdFontSystem.begin(renderer);

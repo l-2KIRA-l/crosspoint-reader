@@ -200,6 +200,7 @@ void RoundedRaffTheme::drawTextField(const GfxRenderer& renderer, Rect rect, con
 
 void RoundedRaffTheme::drawButtonHints(GfxRenderer& renderer, const char* btn1, const char* btn2, const char* btn3,
                                        const char* btn4) const {
+  return;  // Kyrylo: підказки кнопок не показуємо
   if (gpio.hasTouch()) {
     return;
   }

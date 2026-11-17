@@ -71,6 +71,19 @@ class HomeActivity final : public Activity {
   void onOpdsBrowserOpen();
   void onPluginsOpen();
 
+  // Kyrylo: головний екран «Блокнот» (замість стандартного)
+  static constexpr int NB_MAX_BOOKS = 4;  // поточна + 3 нещодавні
+  static constexpr int NB_ICON_COUNT = 3;  // папка, бібліотека, налаштування
+  std::vector<int> nbProgress;            // відсоток прочитаного для кожної книжки (-1 = невідомо)
+  std::vector<std::string> nbThumbBig;    // шлях до великої обкладинки (поточна книжка)
+  std::vector<std::string> nbThumbSmall;  // шлях до малої обкладинки
+  std::string nbChapterLabel;             // «глава XX»
+  bool nbInfoLoaded = false;
+  void nbLoadInfo();
+  void nbRender();
+  void nbLoop();
+  void nbActivate();
+
   int getMenuItemCount() const;
   bool storeCoverBuffer();    // Store frame buffer for cover image
   bool restoreCoverBuffer();  // Restore frame buffer from stored cover
