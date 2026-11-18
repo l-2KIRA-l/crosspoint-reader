@@ -34,11 +34,8 @@
 namespace {
 // Metalio: B/W sleep images use the full 0xF7 waveform instead of HALF (two
 // 0xFC partials), matching the clean pass before absolute gray below.
-#if FREEINK_DEVICE_METALIO_EINK4
+// Kyrylo: завжди повне оновлення — після HALF заставка з часом «просвічує» попередній екран.
 constexpr auto kSleepClean = HalDisplay::FULL_REFRESH;
-#else
-constexpr auto kSleepClean = HalDisplay::HALF_REFRESH;
-#endif
 
 // The absolute gray paint has no base pass. On Metalio the prior screen shows
 // through it after the panel sits unpowered, so clean with 0xF7 first.

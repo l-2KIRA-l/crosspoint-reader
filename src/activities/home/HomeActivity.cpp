@@ -27,7 +27,7 @@
 #include "fontIds.h"
 
 int HomeActivity::getMenuItemCount() const {
-  return static_cast<int>(recentBooks.size()) + NB_ICON_COUNT;  // Kyrylo: книжки + 3 іконки
+  return static_cast<int>(recentBooks.size()) + NB_ICON_COUNT + 1;  // Kyrylo: книжки + 3 іконки + Wi‑Fi
   int count = 4;  // File Browser, Library, File transfer, Settings
   if (!recentBooks.empty()) {
     count += recentBooks.size();
@@ -244,8 +244,10 @@ void HomeActivity::onEnter() {
     const int n = static_cast<int>(recentBooks.size());
     switch (initialMenuItem) {
       case HomeMenuItem::FILE_BROWSER:
-      case HomeMenuItem::FILE_TRANSFER:
         selectorIndex = n;
+        break;
+      case HomeMenuItem::FILE_TRANSFER:
+        selectorIndex = n + NB_ICON_COUNT;  // значок Wi‑Fi вгорі
         break;
       case HomeMenuItem::LIBRARY:
         selectorIndex = n + 1;

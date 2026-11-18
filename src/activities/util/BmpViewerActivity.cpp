@@ -479,20 +479,9 @@ void BmpViewerActivity::loop() {
   int touchY = 0;
   if (mappedInput.wasReleased(MappedInputManager::Button::Confirm) || mappedInput.wasScreenLongPress(touchX, touchY)) {
     if (!canSetSleepCover()) return;
-
-    auto confirmation = makeUniqueNoThrow<ConfirmationActivity>(renderer, mappedInput, tr(STR_SET_SLEEP_COVER_CONFIRM),
-                                                                filePath.substr(filePath.find_last_of('/') + 1));
-    if (!confirmation) {
-      LOG_ERR("BMP", "OOM: sleep cover confirmation (%zu bytes)", sizeof(ConfirmationActivity));
-      return;
-    }
-    startActivityForResult(std::move(confirmation), [this](const ActivityResult& result) {
-      if (result.isCancelled) {
-        onEnter();
-        return;
-      }
-      doSetSleepCover();
-    });
+    // Kyrylo: без підказок кнопок діалог «Скасувати/Підтвердити» легко скасувати випадково —
+    // «Вибрати» на картинці одразу ставить її на заставку сну.
+    doSetSleepCover();
     return;
   }
 
