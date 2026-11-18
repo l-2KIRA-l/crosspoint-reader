@@ -837,7 +837,13 @@ void SleepActivity::renderBitmapSleepScreen(const Bitmap& bitmap, const bool pre
 
   LOG_DBG("SLP", "bitmap %d x %d, screen %d x %d", bitmap.getWidth(), bitmap.getHeight(), pageWidth, pageHeight);
   LOG_DBG("SLP", "drawing to %d x %d", x, y);
-  if (!preserveBackground) renderer.clearScreen();
+  if (!preserveBackground) {
+    // Kyrylo: без живлення попередній екран поступово «просвічує» крізь заставку.
+    // Спершу прожигаємо все чорним повним оновленням, потім малюємо картинку.
+    renderer.clearScreen(0x00);
+    renderer.displayBuffer(HalDisplay::FULL_REFRESH);
+    renderer.clearScreen();
+  }
 
   const bool hasGreyscale = (bitmap.hasGreyscale() || (preserveBackground && overlayGrayCover)) &&
                             (preserveBackground || SETTINGS.sleepScreenCoverFilter ==
