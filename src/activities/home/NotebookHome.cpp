@@ -13,7 +13,7 @@
 //   ~~ папка ~~ (бібліотека) ~~ налаштування ~~   (терновий узор)
 //
 // Керування: стрілки/бокові кнопки ходять по книжках і значках, «Вибрати» відкриває,
-// «Назад» — продовжити поточну книжку, значок Wi‑Fi вгорі (або довге «Вибрати» на папці) — передача файлів.
+// «Назад» — продовжити поточну книжку, довге «Вибрати» на папці — передача по Wi‑Fi.
 
 #include <Bitmap.h>
 #include <Epub.h>
@@ -200,15 +200,12 @@ void HomeActivity::nbRender() {
   renderer.clearScreen();
 
   // ── верхній рядок: Wi‑Fi (коли підключено), ^_^, заряд у відсотках ──
-  // Значок Wi‑Fi — це кнопка «передача файлів» (вибрана: біла на чорному колі).
-  {
-    const bool sel = selectorIndex == n + NB_ICON_COUNT;
-    if (sel) fillCircle(r, 30, 22, 21, true);
-    for (const int rad : {14, 8}) {
-      r.drawArc(rad, 30, 30, -1, -1, 2, !sel);
-      r.drawArc(rad, 30, 30, 1, -1, 2, !sel);
+  if (WiFi.status() == WL_CONNECTED) {
+    for (const int rad : {11, 6}) {
+      r.drawArc(rad, 30, 27, -1, -1, 2, true);
+      r.drawArc(rad, 30, 27, 1, -1, 2, true);
     }
-    r.fillRect(28, 27, 5, 5, !sel);
+    r.fillRect(29, 26, 3, 3, true);
   }
   drawMono(r, NbFace, (SCREEN_W - NbFaceW) / 2, 14, NbFaceW, NbFaceH);
   {
@@ -344,9 +341,6 @@ void HomeActivity::nbActivate() {
       break;
     case 2:
       onSettingsOpen();
-      break;
-    case 3:
-      onFileTransferOpen();
       break;
     default:
       break;
